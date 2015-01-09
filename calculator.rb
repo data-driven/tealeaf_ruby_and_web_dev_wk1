@@ -14,12 +14,12 @@ loop do
   puts 'Now enter your second number.'
   num2 = gets.chomp
 
-  puts 'Enter the number for the operation would you like to perform'
+  puts 'Enter the number for the operation you would like to perform.'
   puts '1) Add 2) Subtract 3) Multiply 4) Divide'
   operation = gets.chomp
 
-  puts 'Your numbers are #{num1} and #{num2}.'
-  puts 'You have selected operation #{operation}.'
+  puts "Your numbers are #{num1} and #{num2}."
+  puts "You have selected operation #{operation}."
 
   case operation
   when '1'
