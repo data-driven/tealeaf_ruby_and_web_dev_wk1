@@ -5,22 +5,23 @@ def say(message)
   puts "=> #{message}"
 end
 
+def get_number
+  number = gets.chomp #to_f used later so original user input is maintained
+  while number != number.to_i.to_s
+    say 'Please be sure to enter a number.'
+    number = gets.chomp
+  end
+  number
+end
+
 puts 'This calculator will perform a mathematical operation on two numbers.'
 
 loop do
   puts 'Please enter your first number.'
-  number_1 = gets.chomp
-  while  number_1 != number_1.to_i.to_s
-    say 'Please be sure to enter a number.'
-    number_1 = gets.chomp
-  end
+  number_1 = get_number
 
   puts 'Now enter your second number.'
-  number_2 = gets.chomp
-  while  number_2 != number_2.to_i.to_s
-    say 'Please be sure to enter a number.'
-    number_2 = gets.chomp
-  end
+  number_2 = get_number
 
   puts 'Enter the number for the operation you would like to perform.'
   puts '1) Add 2) Subtract 3) Multiply 4) Divide'
@@ -43,7 +44,8 @@ loop do
     say "The product of #{number_1} * #{number_2} is #{(number_1.to_f * number_2.to_f).round(4)}"
   else
     while number_2.to_i == 0
-      say 'You can\'t divide by zero. Please enter a non-zero value for your second number.'
+      say 'You can\'t divide by zero.'
+      say 'Please enter a non-zero value for your second number.'
       number_2 = gets.chomp
     end
     say "The result of #{number_1} / #{number_2} is #{(number_1.to_f / number_2.to_f).round(4)}"
