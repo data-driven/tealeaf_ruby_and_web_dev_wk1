@@ -1,4 +1,6 @@
-piece_placement = { 1 => ' ', 2 => ' ', 3 => ' ', 4 => ' ', 5 => ' ', 6 => ' ', 7 => ' ', 8 => ' ', 9 => ' ' }
+def initialize_board
+  piece_placement = { 1 => ' ', 2 => ' ', 3 => ' ', 4 => ' ', 5 => ' ', 6 => ' ', 7 => ' ', 8 => ' ', 9 => ' ' }
+end
 
 def check_winner(piece_placement)
   winning_lines = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
@@ -9,7 +11,28 @@ def check_winner(piece_placement)
   nil
 end
 
-loop do
+def empty_positions(board)
+  board.keys.select { |position| board[position] == ' '}
+end
+
+def board_filled?(board)
+  empty_positions = board.keys.select { |position| board[position] == ' '}
+  if empty_positions == []
+    return true
+  else
+    return false
+  end
+end
+
+def announce_winner(winner)
+  puts "We have a winner! #{winner} takes the game." 
+end
+
+def announce_tie
+  puts "It's a tie!"
+end
+
+def draw_board(piece_placement)
   system 'clear'
 
   puts '     |     |     '
@@ -25,21 +48,51 @@ loop do
   puts '     |     |     '
 
   puts
+end 
 
-  #player selects
-  puts 'Choose a position (from 1 to 9) to place a piece:'
-  player_selection = gets.chomp.to_i
-  piece_placement[player_selection] = 'X'
-  if check_winner(piece_placement) == 'Player'
-    puts "We have a winner! X takes the game." 
-    break
-  end
+board = initialize_board
+draw_board(board)
 
-  # computer_selection -- random
-  computer_selection = piece_placement.select { |k,v| v == ' ' }.to_a.sample(1).flatten[0]
-  piece_placement[computer_selection] = 'O'
-  if check_winner(piece_placement) == 'Computer'
-    puts "We have a winner! O takes the game." 
+loop do
+  begin
+    #player selects
+    begin
+      puts 'Choose a position that has not been taken'
+      puts '(from 1 to 9) to place a piece:'
+      player_selection = gets.chomp.to_i
+    end until empty_positions(board).include?(player_selection)
+    board[player_selection] = 'X'
+    draw_board(board)
+    winner = check_winner(board)
+    if winner
+      announce_winner('X')
+      break
+    elsif board_filled?(board)
+      announce_tie
+    end
+
+    # computer_selection -- random
+    computer_selection = board.select { |k,v| v == ' ' }.to_a.sample(1).flatten[0]
+    board[computer_selection] = 'O'
+    draw_board(board)
+    winner = check_winner(board)
+    if winner 
+      announce_winner('O') 
+      break
+    elsif board_filled?(board)
+      announce_tie
+    end
+  end until check_winner(board) || board_filled?(board)
+  
+  begin 
+    puts 'Play again? Y or N'
+    response = gets.chomp.upcase
+  end until response == 'Y' || response == 'N'
+  if response == 'N'
     break
+  else
+    board = initialize_board
+    draw_board(board)
   end
 end
+puts 'Thanks for playing. See you next time.'
