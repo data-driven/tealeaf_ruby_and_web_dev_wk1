@@ -137,9 +137,10 @@ loop do
   end until player_stay_or_hit == 'S' || calculate_score(player_hand) > 21
 
   if player_stay_or_hit == 'S'
-    puts
+    system 'clear'
     display_dealer_hand(dealer_hand)
     display_dealer_score(dealer_hand)
+    display_player_score(player_hand)
 
     begin
       if blackjack?(dealer_hand)
