@@ -18,9 +18,9 @@ end
 def board_filled?(board)
   empty_positions = board.keys.select { |position| board[position] == ' '}
   if empty_positions == []
-    return true
+    true
   else
-    return false
+    false
   end
 end
 
@@ -61,6 +61,7 @@ loop do
       puts '(from 1 to 9) to place a piece:'
       player_selection = gets.chomp.to_i
     end until empty_positions(board).include?(player_selection)
+
     board[player_selection] = 'X'
     draw_board(board)
     winner = check_winner(board)
@@ -72,7 +73,7 @@ loop do
     end
 
     # computer_selection -- random
-    computer_selection = board.select { |k,v| v == ' ' }.to_a.sample(1).flatten[0]
+    computer_selection = board.select { |key, value| value == ' ' }.to_a.sample(1).flatten[0]
     board[computer_selection] = 'O'
     draw_board(board)
     winner = check_winner(board)
@@ -88,11 +89,13 @@ loop do
     puts 'Play again? Y or N'
     response = gets.chomp.upcase
   end until response == 'Y' || response == 'N'
+
   if response == 'N'
     break
   else
     board = initialize_board
     draw_board(board)
   end
+  
 end
 puts 'Thanks for playing. See you next time.'

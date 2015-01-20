@@ -5,10 +5,8 @@ def shuffle_cards
   suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 
   deck1 = cards.product(suits).shuffle
-  #deck2 = cards.product(suits).shuffle
-  #deck3 = cards.product(suits).shuffle
-  game_deck = deck1 #+ deck2 + deck3
-  return game_deck
+  game_deck = deck1 
+  game_deck
 end
 
 def deal_card(deck, hand)
@@ -22,7 +20,6 @@ end
 
 def calculate_score(hand)
   score = 0
-  ace_count = 0
   hand.each do |value| 
     case value[0]
     when 2..10
@@ -30,26 +27,26 @@ def calculate_score(hand)
     when 'Jack', 'King', 'Queen'
       score += 10
     when 'Ace'
-      ace_count += 1
       score += 11
     end
-    while score > 21 && ace_count > 0
-      score -= 10
-      ace_count -= 1
-    end
   end
-  return score
+  hand.select{ |card| card == 'Ace' }.count.times do
+    score -= 10 if total > 21
+  end
+  score
 end
 
 def blackjack?(hand) 
   card_array = []
   hand.each { |card| card_array.push card[0] }
-  if (card_array.length == 2 && card_array.include?('Ace') && ((card_array.include?('Jack')) || (card_array.include?('Queen')) || (card_array.include?('King'))))
-    return 'BLACKJACK!!!'
+  if (card_array.length == 2 && card_array.include?('Ace') && \
+     ((card_array.include?('Jack')) || (card_array.include?('Queen')) || \
+      (card_array.include?('King'))))
+    'BLACKJACK!!!'
   elsif calculate_score(hand) == 21
-    return 'Score of 21!!!'
+    'Score of 21!!!'
   else
-    return nil
+    nil
   end
 end
 
@@ -79,8 +76,9 @@ def stay_or_hit
   begin
     puts 'Would you like to stay or hit? (Enter S or H)'
     stay_or_hit = gets.chomp.upcase 
+    puts "Invalid entry. Please try again" if !['S', 'H'].include?(stay_or_hit)
   end until stay_or_hit == 'S' || stay_or_hit == 'H' 
-  return stay_or_hit
+  stay_or_hit
 end
 
 game_deck = shuffle_cards
@@ -191,8 +189,3 @@ loop do
 end
 
 puts "Thanks for playing #{player_name}"
-
-
-
-
-
